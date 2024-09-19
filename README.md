@@ -1,5 +1,6 @@
 Grocery App
 Is a mobile platform that you can:
+
 -Product search and filtering
 -See the list of products
 -Add and delete a products
