@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="/grocery-app/styles/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <!-- Header with title and menu button -->
+        <h1 id="header-title">Settings</h1>
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <nav id="nav-menu">
+            <ul>
+                <li><a href="index.html" onclick="closeMenu()">Dashboard</a></li>
+                <li><a href="add-product.html">Add Product</a></li> 
+                <li><a href="add-to-cart.html">My Cart</a></li> 
+                <li><a href="reglog.html" onclick="closeMenu()">Logout</a></li> 
+            </ul>
+        </nav>
+    </header>
+
+    <div id="product-list">
+ 
+    </div>
+
+    <div id="notification" class="hidden"></div>
+
+    <script src="/grocery-app/script/script.js"></script>
+    <script>
+        // Load products and display them with edit and delete buttons
+        window.onload = function() {
+            filterProducts();
+            
+        };
+        
+        // Function to filter and display products from local storage
+        function filterProducts() {
+            const productList = document.getElementById('product-list'); 
+            const products = JSON.parse(localStorage.getItem('products')) || []; 
+
+            productList.innerHTML = ''; 
+
+            // Loop through each product and create elements to display them
+            products.forEach((product, index) => {
+                const productItem = document.createElement('div');
+                productItem.className = 'product-item';
+                productItem.dataset.index = index;
+
+                productItem.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}"> <!-- Product image -->
+                    <h2>${product.name}</h2> <!-- Product name -->
+                    <p>Brand: ${product.brand}</p> <!-- Product brand -->
+                    <p>Price: ${product.price}</p> <!-- Product price -->
+                    <p>Weight/Volume: ${product.weight}</p> <!-- Product weight/volume -->
+                    <p>Quantity: ${product.quantity}</p> <!-- Product quantity -->
+                    <p>Store: ${product.store}</p> <!-- Store name -->
+                    <div class="product-actions">
+                        <button onclick="editProduct(${index})">Edit</button> <!-- Edit button -->
+                        <button onclick="deleteProduct(${index})">Delete</button> <!-- Delete button -->
+                    </div>
+                `;
+
+                productList.appendChild(productItem);
+            });
+        }
+
+        // Function to edit a product
+        function editProduct(index) {
+            window.location.href = `edit-product.html?index=${index}`;
+        }
+
+        // Function to delete a product
+        function deleteProduct(index) {
+            let products = JSON.parse(localStorage.getItem('products')) || [];
+            products.splice(index, 1);
+            localStorage.setItem('products', JSON.stringify(products));
+            filterProducts(); 
+            showNotification('Product deleted successfully!'); 
+        }
+    </script>
+</body>
+</html>

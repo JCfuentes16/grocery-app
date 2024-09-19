@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <link rel="stylesheet" href="/grocery-app/styles/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+
+<body>
+    <header>
+        <!-- Header section with title and navigation menu -->
+        <h1 id="header-title">Add Product</h1>
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <nav id="nav-menu">
+            <ul>
+                <li><a href="index.html" onclick="closeMenu()">Dashboard</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a href="add-to-cart.html">My Cart</a></li>
+                <li><a href="reglog.html" onclick="closeMenu()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Form to add a new product -->
+        <form id="add-product-form">
+            <!-- Input fields for product details -->
+            <input type="text" id="product-name" placeholder="Product Name" required>
+            <input type="text" id="brand" placeholder="Brand" required>
+            <input type="number" id="price" placeholder="Price (₱)" required>
+            <select id="weight" required>
+                <option value="" disabled selected>Weight/Volume</option>
+                <option value="1L">1/4kg</option>
+                <option value="30g">8g</option>
+                <option value="175g">1/2kg</option>
+                <option value="250g">1kg</option>
+                <option value="500g">500g</option>
+            </select>
+
+            <input type="number" id="quantity" placeholder="Quantity" required>
+            <input type="text" id="store" placeholder="Store" required>
+            <select id="category" name="category" required onchange="updateCategory()">
+                <!-- Product categories -->
+                <option value="Fruits">Fruits</option>
+                <option value="Vegetables">Vegetables</option>
+                <option value="Canned Goods">Canned Goods</option>
+                <option value="Crackers">Crackers</option>
+            </select>
+            <input type="file" id="image" accept="image/*">
+            <button type="submit">Save Product</button>
+        </form>
+
+        <!-- Notification message that appears after product is saved -->
+        <div id="notification" class="hidden">Product saved successfully!</div>
+    </main>
+
+    <!-- Linking to external JavaScript for the functionality -->
+    <script src="/grocery-app/script/script.js"></script>
+</body>
+</html>

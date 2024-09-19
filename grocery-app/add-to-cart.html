@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character encoding and viewport settings for responsive design -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cart</title>
+    <!-- Linking to external CSS for styles and Font Awesome for icons -->
+    <link rel="stylesheet" href="/grocery-app/styles/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif; /* Setting font family */
+            margin: 0; /* Removing default margin */
+            padding: 0; /* Removing default padding */
+            background-color: #f4f4f4; /* Light gray background color */
+        }
+
+        header {
+            background-color: #ec94e9; /* Header background color */
+            color: #fff; /* Text color in header */
+            padding: 10px; /* Padding around header */
+            text-align: center; /* Center text alignment */
+        }
+
+        header h1 {
+            margin: 0; /* Removing margin for h1 */
+            font-size: 24px; /* Font size for header title */
+        }
+
+        header .menu-btn {
+            background: none; /* No background for menu button */
+            border: none; /* No border */
+            font-size: 20px; /* Font size for menu button */
+            color: #fff; /* Text color for menu button */
+            cursor: pointer; /* Cursor changes to pointer */
+        }
+
+        #nav-menu {
+            display: none; /* Initially hide the navigation menu */
+            position: absolute; /* Position menu absolutely */
+            right: 0; /* Align menu to the right */
+            top: 50px; /* Position menu below the header */
+            background: linear-gradient(#08f3b6, #043cfa); /* Gradient background */
+            border: 1px solid #ffffff; /* White border */
+            padding: 10px; /* Padding inside menu */
+            border-radius: 5px; /* Rounded corners */
+            z-index: 1000; /* Ensure menu appears above other elements */
+        }
+
+        #nav-menu ul {
+            list-style: none; /* Remove default list styling */
+            padding: 0; /* No padding */
+            margin: 0; /* No margin */
+        }
+
+        #nav-menu ul li {
+            margin: 10px 0; /* Space between list items */
+        }
+
+        #nav-menu ul li a {
+            color: #fff; /* Link text color */
+            text-decoration: none; /* Remove underline */
+            font-size: 16px; /* Font size for links */
+            display: block; /* Make link fill the list item */
+        }
+
+        #cart-container {
+            max-width: 800px; /* Maximum width for cart container */
+            margin: 20px auto; /* Center the container */
+            padding: 20px; /* Padding inside container */
+            background-color: #fff; /* White background for cart */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+        }
+
+        .compact-product-item {
+            display: flex; /* Use flexbox for layout */
+            align-items: center; /* Center items vertically */
+            padding: 10px; /* Padding around product item */
+            border: 1px solid #ddd; /* Light gray border */
+            border-radius: 5px; /* Rounded corners */
+            margin-bottom: 10px; /* Space between product items */
+            background-color: #f9f9f9; /* Light background color */
+            position: relative; /* Position relative for potential absolute children */
+            transition: background-color 0.3s ease; /* Smooth background transition */
+            justify-content: space-between; /* Space between flex items */
+        }
+
+        .compact-product-item:hover {
+            background-color: #eaeaea; /* Change background on hover */
+        }
+
+        .compact-product-item img {
+            max-width: 60px; /* Limit image width */
+            height: auto; /* Maintain aspect ratio */
+            margin-right: 15px; /* Space between image and text */
+            border-radius: 5px; /* Rounded corners for image */
+        }
+
+        .compact-product-item .details {
+            flex: 1; /* Allow details to fill remaining space */
+            display: flex; /* Use flexbox for layout */
+            flex-direction: column; /* Stack details vertically */
+        }
+
+        .compact-product-item h2 {
+            font-size: 16px; /* Font size for product name */
+            margin: 0; /* Remove default margin */
+        }
+
+        .compact-product-item .info {
+            display: flex; /* Use flexbox for info layout */
+            align-items: center; /* Center items vertically */
+            gap: 10px; /* Space between info elements */
+        }
+
+        .product-actions {
+            display: flex; /* Use flexbox for product actions */
+            align-items: center; /* Center items vertically */
+            gap: 10px; /* Space between actions */
+        }
+
+        .product-actions input[type="number"] {
+            width: 30%; /* Set width for quantity input */
+            max-width: 80px; /* Maximum width */
+            padding: 5px; /* Padding inside input */
+            border: 1px solid #ddd; /* Light gray border */
+            border-radius: 5px; /* Rounded corners */
+            text-align: center; /* Center text inside input */
+        }
+
+        .product-actions input[type="checkbox"] {
+            margin-right: 10px; /* Space to the right of checkbox */
+        }
+
+        .product-actions button {
+            padding: 5px 10px; /* Padding for buttons */
+            background-color: #08f3b6; /* Button background color */
+            color: #fff; /* Button text color */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Cursor changes to pointer */
+            font-size: 14px; /* Font size for buttons */
+            transition: background-color 0.3s ease; /* Smooth background transition */
+            align-self: center; /* Center button vertically */
+        }
+
+        .product-actions button:hover {
+            background-color: #08f3b6; /* Button color on hover */
+        }
+
+        #buy-button {
+            padding: 10px 20px; /* Padding for buy button */
+            color: #fff; /* Button text color */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Cursor changes to pointer */
+            font-size: 16px; /* Font size for buy button */
+            margin-top: 20px; /* Margin above button */
+            transition: background-color 0.3s ease; /* Smooth background transition */
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Header with title and menu button -->
+        <h1>My Cart</h1>
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <nav id="nav-menu">
+            <ul>
+                <li><a href="index.html" onclick="closeMenu()">Dashboard</a></li>
+                <li><a href="add-product.html">Add Product</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a href="reglog.html" onclick="closeMenu()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div id="cart-container">
+            <div id="cart-items">
+                <!-- Unchecked items -->
+            </div>
+            <div id="checked-items">
+                <!-- Checked items -->
+            </div>
+            <button id="buy-button" onclick="handleBuy()">Buy</button>
+        </div>
+    </main>
+
+    <!-- Linking to external JavaScript for functionality -->
+    <script src="/grocery-app/script/script.js"></script>
+    <script>
+        // Load cart items on page load
+        function loadCart() {
+            const cartContainer = document.getElementById('cart-items');
+            const checkedContainer = document.getElementById('checked-items');
+            const cart = JSON.parse(localStorage.getItem('cart')) || []; // Get cart from local storage
+            let totalPrice = 0; // Initialize total price
+
+            cartContainer.innerHTML = ''; // Clear unchecked items
+            checkedContainer.innerHTML = ''; // Clear checked items
+
+            // Iterate over each item in the cart
+            cart.forEach((product, index) => {
+                const productItem = document.createElement('div'); // Create a product item element
+                productItem.className = 'compact-product-item'; // Assign class
+                productItem.dataset.index = index; // Set index in data attribute
+                productItem.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}"> <!-- Product image -->
+                    <div class="details">
+                        <h2>${product.name}</h2> <!-- Product name -->
+                        <div class="info">
+                            <p>₱${product.price}</p> <!-- Product price -->
+                            <div class="product-actions">
+                                <input type="checkbox" ${product.checked ? 'checked' : ''} onchange="toggleCheck(${index}, this.checked)"> <!-- Checkbox for selection -->
+                                <input type="number" value="${product.quantity}" min="1" onchange="updateQuantity(${index}, this.value)"> <!-- Quantity input -->
+                                <button onclick="removeFromCart(${index})">Remove</button> <!-- Remove button -->
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Append to the appropriate container based on checked status
+                if (product.checked) {
+                    checkedContainer.appendChild(productItem);
+                } else {
+                    cartContainer.appendChild(productItem);
+                }
+
+                // Calculate total price
+                totalPrice += product.price * product.quantity;
+            });
+
+            // Update total price display
+            document.getElementById('total-price').textContent = `Total Price: ₱${totalPrice.toFixed(2)}`;
+        }
+
+        // Function to toggle the checked status of an item
+        function toggleCheck(index, isChecked) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || []; // Get cart
+            cart[index].checked = isChecked; // Update checked status
+            localStorage.setItem('cart', JSON.stringify(cart)); // Save back to local storage
+            loadCart(); // Reload cart to reflect changes
+        }
+
+        // Function to update the quantity of an item
+        function updateQuantity(index, newQuantity) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || []; // Get cart
+            cart[index].quantity = parseInt(newQuantity); // Update quantity
+            localStorage.setItem('cart', JSON.stringify(cart)); // Save back to local storage
+            loadCart(); // Reload cart to reflect changes
+        }
+
+        // Function to remove an item from the cart
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || []; 
+            cart.splice(index, 1); // Remove the product
+            localStorage.setItem('cart', JSON.stringify(cart)); // Save back to local storage
+            loadCart(); // Reload cart to reflect changes
+        }
+
+        // Function to handle the buying process
+        function handleBuy() {
+            const buySummary = document.getElementById('buy-summary'); 
+            const buyItems = document.getElementById('buy-items');
+            const cart = JSON.parse(localStorage.getItem('cart')) || []; 
+            let totalPrice = 0;
+
+            buyItems.innerHTML = ''; // Clear previous buy items
+
+            // Iterate over checked items in the cart
+            cart.forEach((product) => {
+                if (product.checked) {
+                    const itemSummary = document.createElement('div');
+                    itemSummary.className = 'compact-product-item'; 
+                    itemSummary.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}"> <!-- Product image -->
+                        <div class="details">
+                            <h2>${product.name}</h2> <!-- Product name -->
+                            <div class="info">
+                                <p>₱${product.price} x ${product.quantity}</p> <!-- Price and quantity -->
+                            </div>
+                        </div>
+                    `;
+                    buyItems.appendChild(itemSummary); // Add to buy items list
+                    totalPrice += product.price * product.quantity; // Calculate total price
+                }
+            });
+
+            document.getElementById('buy-total').textContent = `Total Price: ₱${totalPrice.toFixed(2)}`; // Update total price display
+            buySummary.style.display = 'block';
+
+            // Remove checked items from the cart
+            const remainingCart = cart.filter(product => !product.checked);
+            localStorage.setItem('cart', JSON.stringify(remainingCart)); // Save remaining items back to local storage
+            loadCart(); // Reload cart to reflect changes
+        }
+
+        // Function to toggle the visibility of the navigation menu
+        function toggleMenu() {
+            const menu = document.getElementById('nav-menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; 
+        }
+
+        // Function to close the navigation menu
+        function closeMenu() {
+            document.getElementById('nav-menu').style.display = 'none'; 
+        }
+
+        // Load cart items on page load
+        window.onload = loadCart; 
+    </script>
+</body>
+</html>
